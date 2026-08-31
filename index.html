@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>はじめてのSNS</title>
+<meta name="description" content="LINE・YouTube・インスタグラムなどの始め方と使い方を、えらんでいくだけで調べられる手引きです。">
+<meta name="theme-color" content="#2b6cb0">
+<style>
+:root{
+  --bg:#f6f8fb; --panel:#ffffff; --ink:#1f2733; --muted:#5d6b7d;
+  --line:#dde4ec; --blue:#2b6cb0; --blue-soft:#e7f0fa;
+  --shadow:0 2px 10px -4px rgba(30,50,80,.14);
+  --r:18px;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#161a20; --panel:#20262e; --ink:#eef1f5; --muted:#a3aebc;
+    --line:#333c48; --blue:#6ea8dd; --blue-soft:#243447;
+    --shadow:0 2px 10px -4px rgba(0,0,0,.5);
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; font-size:107%}
+html[data-size="big"]{font-size:120%}
+html[data-size="huge"]{font-size:136%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+  font-size:1rem; line-height:1.9; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:620px; margin:0 auto; padding:0 16px 80px}
+
+/* ── 上のバー ── */
+.top{
+  position:sticky; top:0; z-index:10; background:var(--bg);
+  border-bottom:1px solid var(--line);
+}
+.top-in{max-width:620px; margin:0 auto; padding:10px 16px;
+  display:flex; align-items:center; gap:10px}
+.back{
+  font-family:inherit; font-size:.95rem; font-weight:700; cursor:pointer;
+  color:var(--blue); background:var(--blue-soft); border:none;
+  padding:9px 15px; border-radius:999px;
+}
+.back[hidden]{display:none}
+.top-title{font-weight:700; font-size:1rem; flex:1; min-width:0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.sizes{display:flex; gap:4px; flex:none}
+.sizes button{
+  font-family:inherit; cursor:pointer; border:1.5px solid var(--line);
+  background:var(--panel); color:var(--muted); border-radius:9px;
+  padding:4px 8px; line-height:1;
+}
+.sizes button:nth-child(1){font-size:.75rem}
+.sizes button:nth-child(2){font-size:.9rem}
+.sizes button:nth-child(3){font-size:1.05rem}
+.sizes button[aria-pressed="true"]{border-color:var(--blue); color:var(--blue); font-weight:700}
+
+/* ── ホーム ── */
+header.hero{padding:30px 0 6px}
+h1{font-size:1.65rem; margin:0 0 6px; line-height:1.4}
+.lede{margin:0; color:var(--muted); font-size:.92rem}
+
+h2.sec{
+  font-size:1.05rem; margin:34px 0 6px; display:flex; align-items:center; gap:8px;
+}
+h2.sec .em{font-size:1.15rem}
+.sec-hint{margin:0 0 14px; font-size:.85rem; color:var(--muted)}
+
+.cards{display:grid; gap:10px}
+.cards.two{grid-template-columns:1fr 1fr}
+.card{
+  font-family:inherit; font-size:1rem; text-align:left; cursor:pointer;
+  background:var(--panel); color:var(--ink);
+  border:1.5px solid var(--line); border-radius:var(--r);
+  padding:15px 16px; box-shadow:var(--shadow);
+  display:flex; align-items:center; gap:12px; line-height:1.5;
+  transition:transform .1s;
+}
+.card:active{transform:scale(.97)}
+.card .mark{
+  flex:none; width:44px; height:44px; border-radius:13px;
+  display:grid; place-items:center; font-size:1.35rem; color:#fff;
+}
+.card b{display:block}
+.card small{display:block; color:var(--muted); font-size:.8rem; font-weight:400}
+.card .go{margin-left:auto; color:var(--muted); flex:none}
+
+/* ── SNSのページ ── */
+.snshead{
+  margin:22px 0 18px; padding:20px 18px; border-radius:var(--r);
+  color:#fff; box-shadow:var(--shadow);
+}
+.snshead .nm{font-size:1.5rem; font-weight:900; margin:0}
+.snshead .kn{font-size:.85rem; opacity:.9}
+.snshead .one{margin:8px 0 0; font-size:1rem; font-weight:700}
+.chips{display:flex; flex-wrap:wrap; gap:7px; margin-top:12px}
+.chip{font-size:.78rem; font-weight:700; background:rgba(255,255,255,.22);
+  padding:3px 12px; border-radius:999px}
+
+.what{margin:0 0 8px; font-size:1rem}
+.need{margin:0 0 20px; font-size:.86rem; color:var(--muted)}
+
+details.box{
+  background:var(--panel); border:1.5px solid var(--line); border-radius:var(--r);
+  margin-bottom:10px; box-shadow:var(--shadow); overflow:hidden;
+}
+details.box > summary{
+  list-style:none; cursor:pointer; padding:16px 17px;
+  font-weight:700; font-size:1rem; display:flex; align-items:center; gap:10px;
+}
+details.box > summary::-webkit-details-marker{display:none}
+details.box > summary::after{content:"＋"; margin-left:auto; color:var(--muted); font-weight:400; flex:none}
+details.box[open] > summary::after{content:"−"}
+details.box[open] > summary{border-bottom:1px solid var(--line)}
+details.box > summary .em{flex:none}
+.box-in{padding:6px 17px 16px}
+
+/* 手順 */
+ol.steps{list-style:none; margin:10px 0 0; padding:0; counter-reset:n}
+ol.steps li{
+  counter-increment:n; position:relative; padding:0 0 20px 46px;
+}
+ol.steps li::before{
+  content:counter(n); position:absolute; left:0; top:2px;
+  width:30px; height:30px; border-radius:50%;
+  background:var(--blue); color:#fff; font-weight:700;
+  display:grid; place-items:center; font-size:.9rem;
+}
+ol.steps li:not(:last-child)::after{
+  content:""; position:absolute; left:14px; top:36px; bottom:2px; width:2px; background:var(--line);
+}
+ol.steps li:last-child{padding-bottom:4px}
+ol.steps b{display:block}
+ol.steps span{display:block; font-size:.88rem; color:var(--muted); margin-top:1px}
+
+/* 中の小さい折りたたみ（よくやること） */
+details.mini{border-top:1px solid var(--line)}
+details.mini:first-of-type{border-top:none}
+details.mini > summary{
+  list-style:none; cursor:pointer; padding:13px 2px; font-weight:700; font-size:.97rem;
+  display:flex; align-items:center;
+}
+details.mini > summary::-webkit-details-marker{display:none}
+details.mini > summary::after{content:"›"; margin-left:auto; color:var(--muted);
+  transform:rotate(90deg); transition:transform .15s}
+details.mini[open] > summary::after{transform:rotate(-90deg)}
+.mini-in{padding:0 2px 14px}
+
+.tip{margin:0 0 14px}
+.tip:last-child{margin-bottom:2px}
+.tip b{display:block}
+.tip p{margin:2px 0 0; font-size:.92rem; color:var(--muted)}
+
+.qa2{margin:0 0 16px}
+.qa2:last-child{margin-bottom:2px}
+.qa2 .q{margin:0; font-weight:700; padding-left:28px; position:relative}
+.qa2 .q::before{content:"Q"; position:absolute; left:0; color:var(--blue); font-weight:900}
+.qa2 .a{margin:3px 0 0; padding-left:28px; font-size:.94rem}
+
+/* おすすめの答え */
+.answer{
+  margin:24px 0 14px; padding:22px 18px; border-radius:var(--r);
+  color:#fff; text-align:center; box-shadow:var(--shadow);
+}
+.answer .sm{margin:0; font-size:.9rem; opacity:.92}
+.answer .nm{margin:4px 0 0; font-size:1.7rem; font-weight:900}
+.reason{
+  background:var(--panel); border:1.5px solid var(--line); border-radius:var(--r);
+  padding:16px 17px; margin-bottom:10px; box-shadow:var(--shadow); font-size:.97rem;
+}
+.reason b{color:var(--blue)}
+.bigbtn{
+  display:block; width:100%; font-family:inherit; font-size:1.05rem; font-weight:700;
+  cursor:pointer; padding:16px; border-radius:var(--r); border:none;
+  background:var(--blue); color:#fff; margin-top:6px;
+}
+
+/* ことば */
+.dict dt{font-weight:700; margin-top:16px}
+.dict dt:first-child{margin-top:0}
+.dict dd{margin:2px 0 0; font-size:.94rem; color:var(--muted)}
+
+/* さがす */
+.search{margin:20px 0 4px}
+.search input{
+  width:100%; padding:14px 16px; font-size:1rem; font-family:inherit;
+  color:var(--ink); background:var(--panel);
+  border:1.5px solid var(--line); border-radius:var(--r);
+}
+.search input:focus{outline:2px solid var(--blue)}
+.hits{margin-top:10px; display:grid; gap:8px}
+.hits .card small{margin-top:1px}
+.noh{margin:12px 0 0; font-size:.9rem; color:var(--muted); text-align:center}
+
+footer.foot{margin-top:40px; padding-top:18px; border-top:1px solid var(--line);
+  font-size:.82rem; color:var(--muted); text-align:center}
+.view{display:none}
+.view.on{display:block}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="top-in">
+  <button class="back" id="back" type="button" hidden>← もどる</button>
+  <div class="top-title" id="topTitle">はじめてのSNS</div>
+  <div class="sizes" id="sizes" role="group" aria-label="文字の大きさ">
+    <button type="button" data-size="">あ</button>
+    <button type="button" data-size="big">あ</button>
+    <button type="button" data-size="huge">あ</button>
+  </div>
+</div></div>
+
+<div class="wrap">
+
+<!-- ホーム -->
+<div class="view" data-view="home">
+  <header class="hero">
+    <h1>はじめてのSNS</h1>
+    <p class="lede">LINE・YouTube・インスタグラム…。<br>
+    えらんでいくだけで、始め方と使い方がわかります。</p>
+  </header>
+
+  <div class="search">
+    <input id="q" type="search" placeholder="ことばで探す（例：写真、電話、詐欺）" aria-label="ことばで探す">
+    <div class="hits" id="hits"></div>
+    <p class="noh" id="noh" hidden>見つかりませんでした。下から えらんでみてください。</p>
+  </div>
+
+  <div id="homeBody">
+    <h2 class="sec"><span class="em">🤔</span>どれを使えばいいか、わからない</h2>
+    <p class="sec-hint">やりたいことを押すと、合うものを教えます。</p>
+    <div class="cards" id="goals"></div>
+
+    <h2 class="sec"><span class="em">📖</span>使い方を知りたい</h2>
+    <p class="sec-hint">知りたいものを押してください。</p>
+    <div class="cards" id="snsList"></div>
+
+    <h2 class="sec"><span class="em">🆘</span>こまったとき</h2>
+    <div class="cards">
+      <button class="card" type="button" data-go="komatta">
+        <span class="mark" style="background:#c05353">🆘</span>
+        <span><b>こまったときは、ここ</b><small>まちがえて送った、変な連絡が来た、など</small></span>
+        <span class="go">›</span>
+      </button>
+      <button class="card" type="button" data-go="kotoba">
+        <span class="mark" style="background:#5a7d5a">🔤</span>
+        <span><b>ことばの意味</b><small>「アカウント」「フォロー」って何？</small></span>
+        <span class="go">›</span>
+      </button>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <p>アプリの画面は、ときどき新しくなります。<br>
+    ボタンの場所がちがっても、名前と流れは同じです。</p>
+  </footer>
+</div>
+
+<!-- SNSの中身・おすすめ・こまった・ことば は、ここに作られます -->
+<div class="view" data-view="page" id="page"></div>
+
+</div>
+
+<script>
+"use strict";
+
+/* ════════════ 中身 ════════════ */
+
+const SNS = {
+  line: {
+    name:"LINE", kana:"ライン", em:"💬", color:"#189b52",
+    one:"家族や友だちと、連絡をとるところ",
+    good:["家族との連絡","無料の電話","写真のやりとり"],
+    what:"文字のやりとり、電話、写真のやりとりが、これ1つでできます。日本でいちばん使われていて、家族や友だちとの連絡は、いまはほとんどこれです。",
+    need:"用意するもの：スマホと、自分の電話番号。お金はかかりません。",
+    start:[
+      ["アプリを入れる","iPhoneは「App Store」、Androidは「Playストア」で「LINE」と探して、「入手」を押します。"],
+      ["電話番号で登録する","自分の電話番号を入れると、数字の「確認番号」がショートメール（電話番号あてに届く短いメール。吹き出しの印のアプリに届きます）で送られてきます。それを入れます。"],
+      ["名前を決める","相手に見える名前です。本名でなくてもかまいません。"],
+      ["家族に「友だち追加」してもらう","いちばん簡単なのは、家族と一緒に「QRコード」で追加する方法。自分のQRコードを見せて、読み取ってもらうだけです。"]
+    ],
+    tasks:[
+      ["メッセージを送る",["下の「トーク」を押す","相手の名前を押す","いちばん下の枠に文字を入れる","右の紙ひこうきの印を押す"]],
+      ["写真を送る",["相手とのトークをひらく","入力する枠の横の「写真」の印を押す","送りたい写真を押してえらぶ","「送信」を押す"]],
+      ["無料で電話をかける",["相手とのトークをひらく","右上の受話器の印を押す","「音声通話」を押す。ふつうの電話と同じように話せます"]],
+      ["顔を見ながら話す（ビデオ通話）",["相手とのトークをひらく","右上の受話器の印を押す","「ビデオ通話」を押す。孫の顔を見ながら話せます"]],
+      ["スタンプを送る",["トークの入力枠の横の、顔の印を押す","好きな絵を押す。ことばの代わりになります"]]
+    ],
+    tips:[
+      ["まちがえて送っても、取り消せる","送ったものを長押しして「送信取消」。24時間以内なら、相手の画面からも消えます（「取り消しました」という表示は残ります）。似た名前の「削除」は自分の画面から消えるだけなので、押すのは「送信取消」のほうです。"],
+      ["写真は「アルバム」に入れると消えない","トークで送った写真は、時間がたつと見られなくなります。残したい写真は、トークの「アルバム」に入れておくといつまでも見られます。"],
+      ["文字を大きくできる","ホーム → 右上の歯車（設定）→「トーク」→「フォントサイズ」で大きくできます。"],
+      ["家族みんなでひとつのトーク（グループ）","家族グループを作ると、1回送るだけで全員に届きます。作るのは家族に頼むのが早いです。"]
+    ],
+    care:[
+      ["知らない人から「友だち追加」が来たら","無視してかまいません。押さなければ何も起きません。"],
+      ["「アカウントが停止されます」という連絡","詐欺です。LINEが、メッセージで確認番号やパスワードを聞いたり、お金を求めたりすることはありません。押さずに消してください。"],
+      ["スマホを買い替えるとき","先に「引き継ぎ」の設定（パスワードの登録）が要ります。買い替える前に、家族か店の人に一言伝えてください。"]
+    ],
+    faq:[
+      ["「既読」って何ですか？","相手がメッセージを読むと付く印です。読んでもらえたかが分かります。逆に、自分が読むと相手にも付きます。"],
+      ["お金はかかりますか？","かかりません。メッセージも電話も無料です（スマホの通信量は使います）。"],
+      ["返事はすぐしないと失礼？","そんなことはありません。電話とちがって、都合のいいときに読んで返せるのがLINEの良さです。"]
+    ]
+  },
+
+  youtube: {
+    name:"YouTube", kana:"ユーチューブ", em:"▶️", color:"#c0392b",
+    one:"世界じゅうの動画を、ただで見られるところ",
+    good:["見るだけでOK","登録なしで始められる","趣味・音楽・体操"],
+    what:"料理の作り方、体操、演歌、将棋、道具の直し方——たいていのことは動画があります。見るだけなら登録もいらず、いますぐ使えます。",
+    need:"用意するもの：スマホだけ。見るだけなら登録も不要です。",
+    start:[
+      ["アプリをひらく","Androidのスマホには最初から入っています（赤い▶の印）。iPhoneには入っていないので、「App Store」で「YouTube」と探して入れます。"],
+      ["上の虫めがねで探す","「肩こり 体操」「サバ 煮付け」のように、ことばを2つ入れると見つかりやすいです。"],
+      ["見たいものを押す","それだけです。次の動画も勝手におすすめされます。"],
+      ["（慣れてきたら）チャンネル登録","気に入った人の動画を追いかけたくなったら「チャンネル登録」。Googleの登録が要ります（Androidのスマホなら、たいてい設定済みです）。急がなくて大丈夫。最初は家族と一緒にやるのが早いです。"]
+    ],
+    tasks:[
+      ["動画を大きい画面で見る",["動画を押す","スマホを横にたおすと、画面いっぱいになります"]],
+      ["止める・すこし戻す",["画面を1回ポンと押す","真ん中の印で一時停止","画面の左側を2回ポンと押すと、10秒戻ります"]],
+      ["昨日見た動画をもう一度見る",["右下の「マイページ」（自分の印）を押す","「履歴」に、見たものが順に並んでいます"]],
+      ["字幕を出す",["動画の画面を1回押す","右上の歯車か、四角い「字幕」の印を押す"]]
+    ],
+    tips:[
+      ["ゆっくり再生できる","早口で聞き取れないときは、歯車（設定）→「再生速度」で0.75倍に。逆に倍速もできます。"],
+      ["テレビでも見られる","最近のテレビにはYouTubeのボタンがあります。大きい画面で体操や演歌を楽しめます。"],
+      ["広告は、待てば必ず終わる","動画の前や途中に広告が入ります。数秒待って「スキップ」と出たら押して飛ばせます。「スキップ」が出ない短い広告もありますが、終われば必ず動画に戻ります。"]
+    ],
+    care:[
+      ["「ウイルスに感染しました」という広告","全部ウソです。あわてて押さないでください。何も起きていません。"],
+      ["お金の心配","見るだけなら一切かかりません。「YouTube Premium」という有料の案内が出ることがありますが、入らなくて大丈夫です。"],
+      ["健康法・お金の話の動画","もっともらしいウソも多いです。1本の動画だけで信じないでください。"]
+    ],
+    faq:[
+      ["コメントは書かないとだめ？","書かなくて大丈夫。ほとんどの人は見るだけです。"],
+      ["登録（アカウント）は必要？","見るだけなら不要。チャンネル登録やコメントをしたくなったときに作れば十分です。"],
+      ["電波が心配","動画は通信量を多く使います。家のWi-Fiで見るのが安心です。"]
+    ]
+  },
+
+  instagram: {
+    name:"インスタグラム", kana:"Instagram（インスタ）", em:"📷", color:"#b53078",
+    one:"写真と短い動画を、見て楽しむところ",
+    good:["きれいな写真","花・料理・旅","登録すれば見るだけでOK"],
+    what:"花、料理、旅先の景色、手芸。きれいな写真が次から次へ流れてきます。自分の写真をのせることもできますが、見るだけで楽しんでいる人もたくさんいます。",
+    need:"用意するもの：スマホと、電話番号かメールアドレス。無料です。",
+    start:[
+      ["アプリを入れる","ストアで「Instagram」と探して入れます。"],
+      ["登録する","電話番号かメールアドレスで登録します。"],
+      ["名前を決める","本名でなくてかまいません。"],
+      ["好きなものを探してみる","下の虫めがねを押して「盆栽」「うつわ」など、好きなことばを入れてみてください。世界が広がります。"]
+    ],
+    tasks:[
+      ["写真を見る・探す",["下の虫めがね（発見）を押す","上の枠に、好きなことばを入れる","気になる写真を押す"]],
+      ["気に入った人を追いかける（フォロー）",["いいなと思った写真の、上の名前を押す","「フォローする」を押す。その人の新しい写真が届くようになります"]],
+      ["「いいね」を送る",["写真の下のハートの印を押すだけ。あいさつ代わりです"]],
+      ["自分の写真をのせる",["下の真ん中の「＋」を押す","のせたい写真をえらぶ","「次へ」を2回押す","ひとことを書いて（書かなくてもOK）「シェア」"]]
+    ],
+    tips:[
+      ["「ストーリー」は1日で消える気軽な投稿","丸い枠の写真は「ストーリー」。24時間で消えるので、気軽にのせられます。"],
+      ["お気に入りは保存できる","写真の右下のしおりの印を押すと、あとから「保存済み」で見返せます。"],
+      ["見るほど、好みが出てくる","発見の画面は、あなたがよく見るものを覚えて、似たものを出してくれます。"]
+    ],
+    care:[
+      ["投稿は、世界中に公開されます","はじめの設定では、のせた写真は誰でも見られます。家族だけに見せたいなら「非公開（鍵つき）」の設定にできます。孫の写真をのせる前に、ひと呼吸。"],
+      ["有名人の「本人」を名乗る連絡","偽物がとても多いです。向こうから連絡が来たら、まず偽物と思ってください。"],
+      ["「もうかる話」の連絡（DM）","向こうから届く投資やもうけ話の誘いは、詐欺と思って間違いありません。返事をせず、消してください。"]
+    ],
+    faq:[
+      ["見るだけでもいいの？","はい。ただし最初の登録だけは要ります。登録さえすれば、写真をのせたことが一度もない人はいくらでもいます。"],
+      ["「ハッシュタグ」って何？","「#盆栽」のような、写真につける名札です。同じ名札の写真をまとめて探せます。"],
+      ["若い人ばかりでは？","いまは年配の利用者も多く、盆栽・山歩き・郷土料理など、落ち着いた世界もにぎわっています。"]
+    ]
+  },
+
+  facebook: {
+    name:"フェイスブック", kana:"Facebook", em:"👥", color:"#2456a0",
+    one:"実名でつきあう、近況報告のところ",
+    good:["昔の知り合いが見つかる","実名で安心","同窓会・地域"],
+    what:"本名で登録する決まりのSNSです。そのおかげで、昔の同級生や仕事仲間が見つかります。近況を書いたり、知り合いの近況を読んだり。同窓会のような場所です。",
+    need:"用意するもの：スマホと、本名と、電話番号かメールアドレス。",
+    start:[
+      ["アプリを入れる","ストアで「Facebook」と探して入れます。"],
+      ["本名で登録する","本名・生年月日・電話番号（かメール）を入れます。ここは本名がルールです。"],
+      ["顔写真を設定する","昔の知り合いに見つけてもらうための目印です。風景の写真でもかまいません。"],
+      ["知り合いを探す","虫めがねで名前を検索。見つけたら「友達追加」を押して、承認されるとつながります。"]
+    ],
+    tasks:[
+      ["知り合いを探す",["上の虫めがねを押す","名前を入れる","顔写真や出身で本人か確かめて、「友達追加」"]],
+      ["近況を書く",["上の「その気持ち、シェアしよう」の枠を押す","文章を書く（写真も足せます）","「投稿」を押す"]],
+      ["知り合いの投稿に反応する",["投稿の下の「いいね！」を押す","ひとこと書きたければ「コメント」"]]
+    ],
+    tips:[
+      ["誕生日を教えてくれる","友達の誕生日の日に知らせてくれます。ひとこと送ると喜ばれます。"],
+      ["趣味の「グループ」が面白い","地域の集まり、山歩き、写真——同じ趣味の集まりがたくさんあります。"],
+      ["見せる範囲を「友達まで」に","投稿するときに「公開」を「友達」に変えると、知り合いだけに見せられます。最初に設定しておくと安心です。"]
+    ],
+    care:[
+      ["知らない外国人からの「友達申請」","無視して大丈夫です。写真がきれいな外国人からの申請は、ほぼ詐欺です。"],
+      ["「乗っ取り」に注意","友達から変なリンク（「これあなた？」など）が届いたら、押さずに本人に電話で確認を。その友達が乗っ取られている合図です。"],
+      ["本名を出したくない人には向きません","その場合は、インスタグラムやLINEのほうが合っています。"]
+    ],
+    faq:[
+      ["若い人は使ってないと聞いたけど？","日本では中高年が中心です。同世代が多いのは、むしろ使いやすい点です。"],
+      ["「メッセンジャー」って何？","フェイスブックの中の、1対1のやりとり用アプリです。LINEのようなものと思ってください。"]
+    ]
+  },
+
+  x: {
+    name:"X（旧ツイッター）", kana:"エックス", em:"📰", color:"#3d4652",
+    one:"短いことばで、「いま」を知るところ",
+    good:["速報が早い","災害時に強い","見るだけでOK"],
+    what:"短い文章が次々流れてくる場所です。電車の遅れ、災害、店の臨時休業——「いま起きていること」はここがいちばん早い。読むだけの人が大勢います。",
+    need:"用意するもの：スマホと、電話番号かメールアドレス。名前は本名でなくてOK。",
+    start:[
+      ["アプリを入れる","ストアで「X」と探して入れます。黒い背景に白いXの印です。"],
+      ["登録する","電話番号かメールで登録。名前は好きに決められます。"],
+      ["公式を「フォロー」しておく","市役所・気象庁・よく乗る電車の公式を虫めがねで探してフォロー。これだけで、暮らしの速報が届くようになります。"]
+    ],
+    tasks:[
+      ["いまの様子を調べる",["上の虫めがねを押す","「〇〇線 遅延」「〇〇市 停電」のように入れる","「最新」の並びにすると、直近の声が読めます"]],
+      ["読みたい人を追いかける（フォロー）",["その人の名前を押す","「フォロー」を押す"]]
+    ],
+    tips:[
+      ["災害のときに強い","地震や大雨のとき、テレビより早く近所の様子が分かります。市役所の公式を入れておくのがおすすめです。"],
+      ["書かなくていい","読む専門の人はいくらでもいます。ひとことも書かずに何年も使えます。"]
+    ],
+    care:[
+      ["ケンカと悪口が多い場所です","言い争いを見かけても、関わらないのがいちばん。返事をしなければ巻き込まれません。"],
+      ["ウソの情報も流れます","衝撃的な話ほど、まず疑ってください。1つの投稿だけで信じず、テレビやニュースでも確かめて。"]
+    ],
+    faq:[
+      ["「ポスト（ツイート）」って何？","1回の投稿のことです。昔は「ツイート」と呼びました。"],
+      ["名前が変わった？","はい。「ツイッター」が2023年に「X」に変わりました。中身はほぼ同じです。"]
+    ]
+  },
+
+  tiktok: {
+    name:"TikTok", kana:"ティックトック", em:"🎵", color:"#4a5568",
+    one:"短い動画が、次々ながれてくるところ",
+    good:["1本1〜2分ほど","まずは見るだけでOK","気楽にながめられる"],
+    what:"1本1〜2分ほどの短い動画が、指で上になでるだけで次々流れてきます。犬や猫、料理、踊り、職人の手仕事。頭を使わずに楽しめます。",
+    need:"用意するもの：スマホだけ。見るだけなら、登録なしでも始められることが多いです（登録をすすめる画面が出たら、閉じてもかまいません）。",
+    start:[
+      ["アプリを入れる","ストアで「TikTok」と探して入れます。"],
+      ["ひらいて、上になでる","それだけです。1本見終わったら、指で上になでると次の動画が出ます。"],
+      ["好きなものを教えていく","気に入った動画でハートを押すと、好みを覚えて、似た動画が増えていきます。"]
+    ],
+    tasks:[
+      ["次の動画を見る",["画面を指で上になでる（下から上へ）。それだけです"]],
+      ["気に入った動画にハートを送る",["右のハートの印を押す"]],
+      ["見たいものを探す",["上か右上の虫めがねを押す","「そば打ち」「盆栽」など、ことばを入れる"]]
+    ],
+    tips:[
+      ["音が出ます","ひらいた瞬間から音が鳴ります。電車の中ではイヤホンか音量に気をつけて。"],
+      ["興味のない動画は、とばしてOK","上になでれば次に行きます。見続ける義理はありません。"]
+    ],
+    care:[
+      ["時間があっという間に溶けます","短い動画が次々来るので、気づくと1時間たっています。時計をちらちら見るのがコツです。"],
+      ["「健康にいい」系の動画","もっともらしいウソが多いジャンルです。真似する前に、かかりつけの先生に聞くくらいでちょうどいいです。"]
+    ],
+    faq:[
+      ["若い人のものでは？","視聴している中高年は実はとても多いです。見るだけなら年齢は関係ありません。"],
+      ["勝手にお金がかかったりしない？","見るだけなら無料です。「投げ銭」など払う機能はありますが、自分で買わない限り請求されません。"]
+    ]
+  }
+};
+
+const GOALS = [
+  { em:"👨‍👩‍👧", t:"家族や友だちと連絡をとりたい", sns:"line",
+    r:"連絡なら <b>LINE</b> がいちばんです。日本ではほとんどの人が使っているので、相手もまず持っています。文字も電話も写真も、これ1つで足ります。" },
+  { em:"📺", t:"動画を見たい（料理・体操・音楽）", sns:"youtube",
+    r:"<b>YouTube</b> です。たいていのことは動画があります。登録もいらず、見るだけなら今すぐ始められます。" },
+  { em:"🌸", t:"きれいな写真を見たい・見せたい", sns:"instagram",
+    r:"<b>インスタグラム</b> です。花・料理・旅の写真が次々流れてきます。まずは見るだけで十分楽しめます。" },
+  { em:"🎓", t:"昔の知り合いと つながりたい", sns:"facebook",
+    r:"<b>フェイスブック</b> です。本名で登録する決まりなので、同級生や昔の仕事仲間が見つかります。" },
+  { em:"⚡", t:"世の中の「いま」を知りたい", sns:"x",
+    r:"<b>X（旧ツイッター）</b> です。電車の遅れや災害の様子は、ここがいちばん早い。読むだけでかまいません。" },
+  { em:"😸", t:"短い動画で気楽に楽しみたい", sns:"tiktok",
+    r:"<b>TikTok</b> です。1本1〜2分ほどの動画が次々流れてきます。指で上になでるだけで、気楽に楽しめます。" }
+];
+
+const KOMATTA = [
+  ["文字が小さくて読めない",
+   "このアプリなら、右上の「あ」で大きくできます。スマホ全体の文字も大きくできます：iPhoneは「設定 → 画面表示と明るさ → テキストサイズ」、Androidは「設定 → ディスプレイ → フォントサイズ」。"],
+  ["まちがえて送ってしまった",
+   "LINEなら、送ったものを長押しして「送信取消」（24時間以内。「削除」ではなく「送信取消」を選びます）。ほかのSNSも、自分の投稿はあとから消せます。あわてなくて大丈夫です。"],
+  ["知らない人から連絡が来た",
+   "返事をしなければ、何も起きません。無視がいちばんの対応です。しつこければ「ブロック」（相手からの連絡を止める機能）があります。"],
+  ["「当選しました」「料金が未納です」と来た",
+   "詐欺です。本物の会社や役所は、SNSでお金の連絡をしません。押さない・返事しない・消す、の3つで大丈夫です。"],
+  ["変な広告を押してしまった",
+   "押しただけなら、まず大丈夫です。「ウイルス感染」と出ても、それ自体がウソの広告です。「登録完了」「料金を払え」という画面が出ても、払わず、電話もかけず、閉じるだけで大丈夫です。"],
+  ["パスワードを忘れた",
+   "どのSNSにも、入口の画面に「パスワードを忘れた場合」があります。押すと、電話番号かメールで作り直せます。紙に控えて、家の決まった場所に置いておくのがおすすめです。"],
+  ["勝手にお金がかからないか心配",
+   "この手引きにあるSNSは、ぜんぶ基本無料です。自分でカード番号を入れて「購入」しない限り、請求されることはありません。"],
+  ["乗っ取りが心配",
+   "パスワードを他の人に教えない、同じパスワードを使い回さない、届いたリンクを不用意に押さない。この3つでほとんど防げます。"],
+  ["自分の写真や情報が、どこまで見られてる？",
+   "LINEのやりとりは相手にしか見えません。インスタ・フェイスブック・Xの「投稿」は、設定しだいで世界中に公開されます。心配なら「非公開（鍵つき）」設定にするか、のせる前に家族に相談を。"],
+  ["やめたくなったら",
+   "どのSNSも、設定の中に「アカウントを削除」があります。自分の登録と投稿は消えます（相手に送ったメッセージは、相手の画面に残ることがあります）。いつでもやめられるので、気楽に始めて大丈夫です。"]
+];
+
+const KOTOBA = [
+  ["アプリを入れる（インストール）","スマホに道具を追加すること。iPhoneは「App Store」、Androidは「Playストア」という店から、無料で入れられます。"],
+  ["アカウント","そのSNSでの「自分の登録」のこと。会員証のようなものです。"],
+  ["ログイン","自分のアカウントに入ること。鍵（パスワード）を使って家に入るのと同じです。"],
+  ["パスワード","自分だけの合いことば。人に教えないでください。紙に控えて家に置くのは、かまいません。"],
+  ["投稿（とうこう）","文章や写真をのせること。掲示板に貼り紙をするイメージです。"],
+  ["フォロー","気に入った人を「追いかける」登録。その人の新しい投稿が、自分に届くようになります。"],
+  ["フォロワー","自分を追いかけてくれている人たちのこと。"],
+  ["いいね","投稿につける「読んだよ」「いいね」の印。ハートや親指の形をしています。あいさつのようなものです。"],
+  ["コメント","投稿へのひとこと返事。"],
+  ["シェア・リポスト","人の投稿を「これ、いいよ」と自分の知り合いにも回すこと。回覧板のイメージです。"],
+  ["タイムライン","投稿が新しい順に流れてくる画面のこと。"],
+  ["プロフィール","自分の名前・写真・自己紹介のページ。"],
+  ["通知（つうち）","「返事が来ました」などの知らせ。多すぎたら設定で減らせます。"],
+  ["スタンプ","ことばの代わりに送る絵。LINEでよく使います。"],
+  ["ハッシュタグ","「#盆栽」のような、投稿につける名札。同じ名札の投稿をまとめて探せます。"],
+  ["リンク","押すと別のページに飛ぶ、文字やボタンのこと。青い文字になっていることが多いです。あやしい連絡の中のリンクは、押さないのが基本です。"],
+  ["QRコード","白黒のまだら模様の四角。カメラで読み取ると、友だち追加などが一発でできます。"],
+  ["チャンネル登録","YouTubeでの「フォロー」のこと。"],
+  ["DM（ディーエム）","みんなに見えない、1対1の手紙のこと。知らない人からのDMは無視してかまいません。"],
+  ["ブロック","特定の相手からの連絡を止める機能。相手に知らせは行きません。"],
+  ["引き継ぎ","スマホを買い替えるとき、いままでのアカウントを新しいスマホに移すこと。LINEは事前の設定が要ります。"],
+  ["Wi-Fi（ワイファイ）","家などの電波。これにつないでいる間は、動画をいくら見ても通信量を使いません。"]
+];
+
+/* ════════════ 道具 ════════════ */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ════════════ 画面のきりかえ ════════════ */
+const page = $("page");
+function show(view, title){
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.dataset.view === view));
+  $("back").hidden = view === "home";
+  $("topTitle").textContent = title || "はじめてのSNS";
+  window.scrollTo(0, 0);
+}
+function route(){
+  const h = location.hash.replace(/^#\/?/, "");
+  if (!h){ show("home"); return; }
+  const [kind, key] = h.split(":");
+  if (kind === "sns" && SNS[key]){ page.innerHTML = snsPage(SNS[key]); show("page", SNS[key].name); }
+  else if (kind === "goal" && GOALS[Number(key)]){ page.innerHTML = goalPage(GOALS[Number(key)]); show("page", "おすすめ"); }
+  else if (kind === "komatta"){ page.innerHTML = komattaPage(); show("page", "こまったとき"); }
+  else if (kind === "kotoba"){ page.innerHTML = kotobaPage(); show("page", "ことばの意味"); }
+  else { show("home"); }
+}
+window.addEventListener("hashchange", route);
+$("back").addEventListener("click", () => history.length > 1 ? history.back() : location.hash = "");
+
+/* ════════════ 画面を組み立てる ════════════ */
+function snsPage(s){
+  const box = (em, title, inner, open) => `
+    <details class="box"${open ? " open" : ""}>
+      <summary><span class="em">${em}</span>${title}</summary>
+      <div class="box-in">${inner}</div>
+    </details>`;
+  return `
+    <div class="snshead" style="background:${s.color}">
+      <p class="nm">${esc(s.name)}</p>
+      <p class="kn">${esc(s.kana)}</p>
+      <p class="one">${esc(s.one)}</p>
+      <div class="chips">${s.good.map(g => `<span class="chip">${esc(g)}</span>`).join("")}</div>
+    </div>
+    <p class="what">${esc(s.what)}</p>
+    <p class="need">${esc(s.need)}</p>
+    ${box("🚪","はじめ方", `<ol class="steps">${s.start.map(([t,d]) =>
+      `<li><b>${esc(t)}</b><span>${esc(d)}</span></li>`).join("")}</ol>`, true)}
+    ${box("👆","よくやること", s.tasks.map(([t, steps]) => `
+      <details class="mini"><summary>${esc(t)}</summary>
+        <div class="mini-in"><ol class="steps">${steps.map(st => `<li><b>${esc(st)}</b></li>`).join("")}</ol></div>
+      </details>`).join(""))}
+    ${box("💡","知ってると便利", s.tips.map(([t,d]) =>
+      `<div class="tip"><b>${esc(t)}</b><p>${esc(d)}</p></div>`).join(""))}
+    ${box("⚠️","気をつけること", s.care.map(([t,d]) =>
+      `<div class="tip"><b>${esc(t)}</b><p>${esc(d)}</p></div>`).join(""))}
+    ${box("❓","よくある質問", s.faq.map(([q,a]) =>
+      `<div class="qa2"><p class="q">${esc(q)}</p><p class="a">${esc(a)}</p></div>`).join(""))}
+  `;
+}
+function goalPage(g){
+  const s = SNS[g.sns];
+  return `
+    <div class="answer" style="background:${s.color}">
+      <p class="sm">それなら、これがいちばん</p>
+      <p class="nm">${s.em} ${esc(s.name)}</p>
+    </div>
+    <div class="reason">${g.r}</div>
+    <div class="reason">むずかしく考えなくて大丈夫。<b>まずは見るだけ・読むだけ</b>で始めて、慣れてきたら次に進めば十分です。</div>
+    <button class="bigbtn" type="button" onclick="location.hash='#/sns:${g.sns}'">${esc(s.name)} の使い方を見る</button>
+  `;
+}
+function komattaPage(){
+  return `
+    <header class="hero"><h1>こまったとき</h1>
+    <p class="lede">当てはまるものを押してください。</p></header>
+    ${KOMATTA.map(([t,d]) => `
+      <details class="box"><summary>${esc(t)}</summary>
+        <div class="box-in"><p class="what" style="margin:8px 0 4px">${esc(d)}</p></div>
+      </details>`).join("")}
+  `;
+}
+function kotobaPage(){
+  return `
+    <header class="hero"><h1>ことばの意味</h1>
+    <p class="lede">よく出てくることばを、ふだんのことばで。</p></header>
+    <div class="reason"><dl class="dict">${KOTOBA.map(([t,d]) =>
+      `<dt>${esc(t)}</dt><dd>${esc(d)}</dd>`).join("")}</dl></div>
+  `;
+}
+
+/* ════════════ ホームの一覧 ════════════ */
+GOALS.forEach((g, i) => {
+  const b = document.createElement("button");
+  b.className = "card"; b.type = "button";
+  b.innerHTML = `<span class="mark" style="background:${SNS[g.sns].color}">${g.em}</span>
+    <span><b>${esc(g.t)}</b></span><span class="go">›</span>`;
+  b.addEventListener("click", () => location.hash = "#/goal:" + i);
+  $("goals").appendChild(b);
+});
+Object.entries(SNS).forEach(([key, s]) => {
+  const b = document.createElement("button");
+  b.className = "card"; b.type = "button";
+  b.innerHTML = `<span class="mark" style="background:${s.color}">${s.em}</span>
+    <span><b>${esc(s.name)}</b><small>${esc(s.one)}</small></span><span class="go">›</span>`;
+  b.addEventListener("click", () => location.hash = "#/sns:" + key);
+  $("snsList").appendChild(b);
+});
+document.querySelectorAll("[data-go]").forEach(b =>
+  b.addEventListener("click", () => location.hash = "#/" + b.dataset.go));
+
+/* ════════════ さがす ════════════ */
+const INDEX = [];
+Object.entries(SNS).forEach(([key, s]) => {
+  INDEX.push({ t:s.name, sub:s.one, words:s.name + s.kana + s.one + s.what + s.good.join(""), go:"#/sns:" + key, color:s.color, em:s.em });
+  s.tasks.forEach(([t]) => INDEX.push({ t, sub:s.name + " の使い方", words:t + s.name + s.kana, go:"#/sns:" + key, color:s.color, em:"👆" }));
+  s.tips.forEach(([t]) => INDEX.push({ t, sub:s.name + " の便利ワザ", words:t + s.name + s.kana, go:"#/sns:" + key, color:s.color, em:"💡" }));
+  s.care.forEach(([t]) => INDEX.push({ t, sub:s.name + " の注意", words:t + s.name + s.kana, go:"#/sns:" + key, color:s.color, em:"⚠️" }));
+  s.faq.forEach(([q]) => INDEX.push({ t:q, sub:s.name + " のよくある質問", words:q + s.name + s.kana, go:"#/sns:" + key, color:s.color, em:"❓" }));
+});
+KOMATTA.forEach(([t, d]) => INDEX.push({ t, sub:"こまったとき", words:t + d, go:"#/komatta", color:"#c05353", em:"🆘" }));
+KOTOBA.forEach(([t, d]) => INDEX.push({ t, sub:"ことばの意味", words:t + d, go:"#/kotoba", color:"#5a7d5a", em:"🔤" }));
+
+$("q").addEventListener("input", () => {
+  const term = $("q").value.trim().toLowerCase();
+  const hits = $("hits");
+  hits.innerHTML = "";
+  $("noh").hidden = true;
+  $("homeBody").style.display = term ? "none" : "";
+  if (!term) return;
+  const found = INDEX.filter(x => (x.t + x.words).toLowerCase().includes(term)).slice(0, 12);
+  if (!found.length){ $("noh").hidden = false; return; }
+  found.forEach(x => {
+    const b = document.createElement("button");
+    b.className = "card"; b.type = "button";
+    b.innerHTML = `<span class="mark" style="background:${x.color}">${x.em}</span>
+      <span><b>${esc(x.t)}</b><small>${esc(x.sub)}</small></span><span class="go">›</span>`;
+    b.addEventListener("click", () => { location.hash = x.go; });
+    hits.appendChild(b);
+  });
+});
+
+/* ════════════ 文字の大きさ ════════════ */
+const sizes = $("sizes");
+function applySize(v){
+  if (v) document.documentElement.dataset.size = v;
+  else delete document.documentElement.dataset.size;
+  [...sizes.children].forEach(b => b.setAttribute("aria-pressed", String(b.dataset.size === v)));
+  try{ localStorage.setItem("nobusns.size", v); }catch(e){}
+}
+[...sizes.children].forEach(b => b.addEventListener("click", () => applySize(b.dataset.size)));
+let savedSize = "";
+try{ savedSize = localStorage.getItem("nobusns.size") || ""; }catch(e){}
+applySize(savedSize === "big" || savedSize === "huge" ? savedSize : "");
+
+route();
+</script>
+</body>
+</html>
