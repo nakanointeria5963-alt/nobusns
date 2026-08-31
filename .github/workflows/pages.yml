@@ -1,0 +1,25 @@
+# main に変更が入るたび、その中身を丸ごと gh-pages ブランチに写します。
+# GitHub Pages は gh-pages ブランチを見て公開するので、
+# これだけで、書いたものがそのままホームページに反映されます。
+# （nobobb と同じ、実績のあるやり方です）
+name: ページを公開する
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: gh-pages に写す
+        run: git push origin HEAD:refs/heads/gh-pages --force
