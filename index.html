@@ -83,6 +83,7 @@ h2.sec .em{font-size:1.15rem}
   flex:none; width:44px; height:44px; border-radius:13px;
   display:grid; place-items:center; font-size:1.35rem; color:#fff;
 }
+.card .mark svg{width:27px; height:27px; display:block}
 .card b{display:block}
 .card small{display:block; color:var(--muted); font-size:.8rem; font-weight:400}
 .card .go{margin-left:auto; color:var(--muted); flex:none}
@@ -92,6 +93,8 @@ h2.sec .em{font-size:1.15rem}
   margin:22px 0 18px; padding:20px 18px; border-radius:var(--r);
   color:#fff; box-shadow:var(--shadow);
 }
+.snshead .headrow{display:flex; align-items:center; gap:14px}
+.snshead .bigicon svg{width:52px; height:52px; display:block}
 .snshead .nm{font-size:1.5rem; font-weight:900; margin:0}
 .snshead .kn{font-size:.85rem; opacity:.9}
 .snshead .one{margin:8px 0 0; font-size:1rem; font-weight:700}
@@ -166,6 +169,8 @@ details.mini[open] > summary::after{transform:rotate(-90deg)}
 }
 .answer .sm{margin:0; font-size:.9rem; opacity:.92}
 .answer .nm{margin:4px 0 0; font-size:1.7rem; font-weight:900}
+.ansicon{margin:10px 0 0}
+.ansicon svg{width:56px; height:56px}
 .reason{
   background:var(--panel); border:1.5px solid var(--line); border-radius:var(--r);
   padding:16px 17px; margin-bottom:10px; box-shadow:var(--shadow); font-size:.97rem;
@@ -229,13 +234,13 @@ footer.foot{margin-top:40px; padding-top:18px; border-top:1px solid var(--line);
   </div>
 
   <div id="homeBody">
+    <h2 class="sec"><span class="em">📖</span>使い方を知りたい</h2>
+    <p class="sec-hint">知りたい SNS を押してください。</p>
+    <div class="cards" id="snsList"></div>
+
     <h2 class="sec"><span class="em">🤔</span>どれを使えばいいか、わからない</h2>
     <p class="sec-hint">やりたいことを押すと、合うものを教えます。</p>
     <div class="cards" id="goals"></div>
-
-    <h2 class="sec"><span class="em">📖</span>使い方を知りたい</h2>
-    <p class="sec-hint">知りたいものを押してください。</p>
-    <div class="cards" id="snsList"></div>
 
     <h2 class="sec"><span class="em">🆘</span>こまったとき</h2>
     <div class="cards">
@@ -265,6 +270,17 @@ footer.foot{margin-top:40px; padding-top:18px; border-top:1px solid var(--line);
 
 <script>
 "use strict";
+
+/* ════════════ ロゴ風の絵柄（各社の公式ロゴは使用に許可が要るため、自前で描いたもの） ════════════ */
+const ICONS = {
+  line:`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 3.2C6.6 3.2 2.2 6.8 2.2 11.2c0 2.6 1.5 4.9 3.8 6.4-.1.8-.5 2.3-.6 2.7-.1.4.2.7.6.5.4-.2 2.5-1.5 3.5-2.1.8.1 1.6.2 2.5.2 5.4 0 9.8-3.6 9.8-8S17.4 3.2 12 3.2z"/></svg>`,
+  youtube:`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="4" fill="#fff"/><path d="M10.2 9.2l5.4 2.8-5.4 2.8z" fill="CLR"/></svg>`,
+  instagram:`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M9.2 4.6l1-1.6h3.6l1 1.6H19a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-11a2 2 0 0 1 2-2h4.2z"/><circle cx="12" cy="12.4" r="3.9" fill="CLR"/><circle cx="12" cy="12.4" r="2.1" fill="#fff"/></svg>`,
+  facebook:`<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.2" r="3.4" fill="#fff"/><path fill="#fff" d="M3 19.5c0-3.4 2.7-6.1 6-6.1s6 2.7 6 6.1z"/><circle cx="16.8" cy="9.2" r="2.5" fill="#fff" opacity=".72"/><path fill="#fff" opacity=".72" d="M15.4 13.9c2.6.4 4.6 2.6 4.6 5.6h-3.5c0-2.2-.4-4.1-1.1-5.6z"/></svg>`,
+  x:`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M13.4 2.5L5 13.4h4.5L8.2 21.5l8.6-11.2h-4.6z"/></svg>`,
+  tiktok:`<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.6" cy="16.8" r="3.2" fill="#fff"/><rect x="10.4" y="4.6" width="2.4" height="12.4" fill="#fff"/><path fill="#fff" d="M10.4 4.6l7.4-1.8v3.1l-7.4 1.8z"/></svg>`
+};
+const icon = key => ICONS[key].replace(/CLR/g, SNS[key].color);
 
 /* ════════════ 中身 ════════════ */
 
@@ -297,12 +313,17 @@ const SNS = {
     care:[
       ["知らない人から「友だち追加」が来たら","無視してかまいません。押さなければ何も起きません。"],
       ["「アカウントが停止されます」という連絡","詐欺です。LINEが、メッセージで確認番号やパスワードを聞いたり、お金を求めたりすることはありません。押さずに消してください。"],
-      ["スマホを買い替えるとき","先に「引き継ぎ」の設定（パスワードの登録）が要ります。買い替える前に、家族か店の人に一言伝えてください。"]
+      ["スマホを買い替えるとき","先に「引き継ぎ」の設定（パスワードの登録）が要ります。買い替える前に、家族か店の人に一言伝えてください。"],
+      ["友だちから「プリペイドカードを買ってきて」と来たら","乗っ取りの典型です。友だち本人ではなく、なりすました他人が送っています。買わずに、電話で本人に確かめてください。「電話番号と確認番号を教えて」も同じ手口です。"],
+      ["電話帳の人が、勝手に「友だち」に出てくる","はじめの設定の「友だち自動追加」がオンだと、電話帳の知り合いと自動でつながります。嫌なら、設定 →「友だち」→「友だち自動追加」をオフにできます。"]
     ],
     faq:[
       ["「既読」って何ですか？","相手がメッセージを読むと付く印です。読んでもらえたかが分かります。逆に、自分が読むと相手にも付きます。"],
       ["お金はかかりますか？","かかりません。メッセージも電話も無料です（スマホの通信量は使います）。"],
-      ["返事はすぐしないと失礼？","そんなことはありません。電話とちがって、都合のいいときに読んで返せるのがLINEの良さです。"]
+      ["返事はすぐしないと失礼？","そんなことはありません。電話とちがって、都合のいいときに読んで返せるのがLINEの良さです。"],
+      ["通知の音が多すぎてうるさい","にぎやかなグループは、通知だけ消せます。そのトークを長押しして「通知オフ」。届いたものは今までどおり読めます。"],
+      ["スタンプはお金がかかる？","無料のものがたくさんあります。有料もありますが、自分で「購入」を押さない限り請求されません。"],
+      ["知らないグループに入れられていた","宣伝目的の迷惑行為です。ひらかずに「退会」して大丈夫です。何度も続くなら、設定で知らない人からの招待を制限できます。"]
     ]
   },
 
@@ -332,12 +353,15 @@ const SNS = {
     care:[
       ["「ウイルスに感染しました」という広告","全部ウソです。あわてて押さないでください。何も起きていません。"],
       ["お金の心配","見るだけなら一切かかりません。「YouTube Premium」という有料の案内が出ることがありますが、入らなくて大丈夫です。"],
-      ["健康法・お金の話の動画","もっともらしいウソも多いです。1本の動画だけで信じないでください。"]
+      ["健康法・お金の話の動画","もっともらしいウソも多いです。1本の動画だけで信じないでください。"],
+      ["有名人が投資をすすめる広告","本人ではありません。顔と名前を勝手に使った詐欺広告で、実際に大きな被害が出ています。有名人が広告で「もうかる話」に誘うことは、まずありません。"]
     ],
     faq:[
       ["コメントは書かないとだめ？","書かなくて大丈夫。ほとんどの人は見るだけです。"],
       ["登録（アカウント）は必要？","見るだけなら不要。チャンネル登録やコメントをしたくなったときに作れば十分です。"],
-      ["電波が心配","動画は通信量を多く使います。家のWi-Fiで見るのが安心です。"]
+      ["電波が心配","動画は通信量を多く使います。家のWi-Fiで見るのが安心です。"],
+      ["見終わると、勝手に次の動画が始まる","「自動再生」という設定です。動画の画面の上のほうにある、自動再生のつまみでオフにできます。"],
+      ["同じような動画ばかり出てくる","見た動画に似たものをすすめる仕組みだからです。虫めがねで別のことばを探すと、新しい世界が広がります。"]
     ]
   },
 
@@ -367,12 +391,16 @@ const SNS = {
     care:[
       ["投稿は、世界中に公開されます","はじめの設定では、のせた写真は誰でも見られます。家族だけに見せたいなら「非公開（鍵つき）」の設定にできます。孫の写真をのせる前に、ひと呼吸。"],
       ["有名人の「本人」を名乗る連絡","偽物がとても多いです。向こうから連絡が来たら、まず偽物と思ってください。"],
-      ["「もうかる話」の連絡（DM）","向こうから届く投資やもうけ話の誘いは、詐欺と思って間違いありません。返事をせず、消してください。"]
+      ["「もうかる話」の連絡（DM）","向こうから届く投資やもうけ話の誘いは、詐欺と思って間違いありません。返事をせず、消してください。"],
+      ["「規約違反です」「認証してください」という連絡","乗っ取りの手口です。本物そっくりの偽の入口に誘い込み、合いことば（パスワード）を盗みます。連絡の中の押すところ（リンク）は押さないでください。"],
+      ["外国の医師・軍人・実業家を名乗る人からの甘い連絡","「ロマンス詐欺」と呼ばれる手口です。会ったことのない相手からの、好意とお金の話の組み合わせは詐欺です。"]
     ],
     faq:[
       ["見るだけでもいいの？","はい。ただし最初の登録だけは要ります。登録さえすれば、写真をのせたことが一度もない人はいくらでもいます。"],
       ["「ハッシュタグ」って何？","「#盆栽」のような、写真につける名札です。同じ名札の写真をまとめて探せます。"],
-      ["若い人ばかりでは？","いまは年配の利用者も多く、盆栽・山歩き・郷土料理など、落ち着いた世界もにぎわっています。"]
+      ["若い人ばかりでは？","いまは年配の利用者も多く、盆栽・山歩き・郷土料理など、落ち着いた世界もにぎわっています。"],
+      ["知らない人にフォローされた","そのままでも害はありません。気になるなら相手を「ブロック」、心配なら自分の投稿を「非公開」にできます。"],
+      ["広告に出てくる激安の店は大丈夫？","極端に安い店は、偽物が届く・届かない被害が多いです。買う前に、店の名前で検索して評判を見てください。"]
     ]
   },
 
@@ -401,11 +429,14 @@ const SNS = {
     care:[
       ["知らない外国人からの「友達申請」","無視して大丈夫です。写真がきれいな外国人からの申請は、ほぼ詐欺です。"],
       ["「乗っ取り」に注意","友達から変なリンク（「これあなた？」など）が届いたら、押さずに本人に電話で確認を。その友達が乗っ取られている合図です。"],
-      ["本名を出したくない人には向きません","その場合は、インスタグラムやLINEのほうが合っています。"]
+      ["本名を出したくない人には向きません","その場合は、インスタグラムやLINEのほうが合っています。"],
+      ["実業家や芸能人の顔が出る投資広告","本人ではありません。顔写真を勝手に使った詐欺広告で、国の機関も注意を呼びかけています。どんなに有名な顔でも、広告からの投資話には乗らないでください。"]
     ],
     faq:[
       ["若い人は使ってないと聞いたけど？","日本では中高年が中心です。同世代が多いのは、むしろ使いやすい点です。"],
-      ["「メッセンジャー」って何？","フェイスブックの中の、1対1のやりとり用アプリです。LINEのようなものと思ってください。"]
+      ["「メッセンジャー」って何？","フェイスブックの中の、1対1のやりとり用アプリです。LINEのようなものと思ってください。"],
+      ["「知り合いかも」に出てくる人は何？","共通の友達や電話帳から、機械が推測して並べています。押さなければ、相手に何も伝わりません。"],
+      ["勝手に写真に名前を付けられた（タグ付け）","自分で外せます。その投稿をひらいて、自分の名前のところから「タグを削除」を押します。"]
     ]
   },
 
@@ -430,11 +461,13 @@ const SNS = {
     ],
     care:[
       ["ケンカと悪口が多い場所です","言い争いを見かけても、関わらないのがいちばん。返事をしなければ巻き込まれません。"],
-      ["ウソの情報も流れます","衝撃的な話ほど、まず疑ってください。1つの投稿だけで信じず、テレビやニュースでも確かめて。"]
+      ["ウソの情報も流れます","衝撃的な話ほど、まず疑ってください。1つの投稿だけで信じず、テレビやニュースでも確かめて。"],
+      ["「当選しました」「サポートです」という手紙（DM）","詐欺です。本物の会社が、Xの手紙でお金や合いことばを聞くことはありません。返事をせず、消してください。"]
     ],
     faq:[
       ["「ポスト（ツイート）」って何？","1回の投稿のことです。昔は「ツイート」と呼びました。"],
-      ["名前が変わった？","はい。「ツイッター」が2023年に「X」に変わりました。中身はほぼ同じです。"]
+      ["名前が変わった？","はい。「ツイッター」が2023年に「X」に変わりました。中身はほぼ同じです。"],
+      ["青いチェックがついていれば本物？","昔は本人確認の印でしたが、いまはお金を払えば付けられます。チェックだけで本物と思わないでください。役所や大きな会社は、灰色や金色の印のことが多いです。"]
     ]
   },
 
@@ -460,11 +493,13 @@ const SNS = {
     ],
     care:[
       ["時間があっという間に溶けます","短い動画が次々来るので、気づくと1時間たっています。時計をちらちら見るのがコツです。"],
-      ["「健康にいい」系の動画","もっともらしいウソが多いジャンルです。真似する前に、かかりつけの先生に聞くくらいでちょうどいいです。"]
+      ["「健康にいい」系の動画","もっともらしいウソが多いジャンルです。真似する前に、かかりつけの先生に聞くくらいでちょうどいいです。"],
+      ["極端に安い通販の広告","届かない・偽物という被害が多いです。動画の勢いで買わず、店の名前で評判を調べてからにしてください。"]
     ],
     faq:[
       ["若い人のものでは？","視聴している中高年は実はとても多いです。見るだけなら年齢は関係ありません。"],
-      ["勝手にお金がかかったりしない？","見るだけなら無料です。「投げ銭」など払う機能はありますが、自分で買わない限り請求されません。"]
+      ["勝手にお金がかかったりしない？","見るだけなら無料です。「投げ銭」など払う機能はありますが、自分で買わない限り請求されません。"],
+      ["「ギフト」「コイン」って何？","配信している人へのおひねり（投げ銭）です。「コイン」を自分で買わない限り、お金は一切かかりません。"]
     ]
   }
 };
@@ -503,6 +538,8 @@ const KOMATTA = [
    "パスワードを他の人に教えない、同じパスワードを使い回さない、届いたリンクを不用意に押さない。この3つでほとんど防げます。"],
   ["自分の写真や情報が、どこまで見られてる？",
    "LINEのやりとりは相手にしか見えません。インスタ・フェイスブック・Xの「投稿」は、設定しだいで世界中に公開されます。心配なら「非公開（鍵つき）」設定にするか、のせる前に家族に相談を。"],
+  ["だまされたかも、と思ったら（相談先）",
+   "ひとりで抱えないでください。消費者ホットライン「188（いやや）」に電話すると、近くの消費生活センターにつながります。急ぎでなければ、警察相談専用電話「#9110」もあります。お金を払う前なら止められることが多いです。家族に話すのも、立派な対応です。"],
   ["やめたくなったら",
    "どのSNSも、設定の中に「アカウントを削除」があります。自分の登録と投稿は消えます（相手に送ったメッセージは、相手の画面に残ることがあります）。いつでもやめられるので、気楽に始めて大丈夫です。"]
 ];
@@ -564,10 +601,12 @@ function snsPage(s){
       <summary><span class="em">${em}</span>${title}</summary>
       <div class="box-in">${inner}</div>
     </details>`;
+  const key = Object.keys(SNS).find(k => SNS[k] === s);
   return `
     <div class="snshead" style="background:${s.color}">
-      <p class="nm">${esc(s.name)}</p>
-      <p class="kn">${esc(s.kana)}</p>
+      <div class="headrow"><span class="bigicon">${icon(key)}</span>
+      <div><p class="nm">${esc(s.name)}</p>
+      <p class="kn">${esc(s.kana)}</p></div></div>
       <p class="one">${esc(s.one)}</p>
       <div class="chips">${s.good.map(g => `<span class="chip">${esc(g)}</span>`).join("")}</div>
     </div>
@@ -592,7 +631,8 @@ function goalPage(g){
   return `
     <div class="answer" style="background:${s.color}">
       <p class="sm">それなら、これがいちばん</p>
-      <p class="nm">${s.em} ${esc(s.name)}</p>
+      <p class="ansicon">${icon(g.sns)}</p>
+      <p class="nm">${esc(s.name)}</p>
     </div>
     <div class="reason">${g.r}</div>
     <div class="reason">むずかしく考えなくて大丈夫。<b>まずは見るだけ・読むだけ</b>で始めて、慣れてきたら次に進めば十分です。</div>
@@ -630,7 +670,7 @@ GOALS.forEach((g, i) => {
 Object.entries(SNS).forEach(([key, s]) => {
   const b = document.createElement("button");
   b.className = "card"; b.type = "button";
-  b.innerHTML = `<span class="mark" style="background:${s.color}">${s.em}</span>
+  b.innerHTML = `<span class="mark" style="background:${s.color}">${icon(key)}</span>
     <span><b>${esc(s.name)}</b><small>${esc(s.one)}</small></span><span class="go">›</span>`;
   b.addEventListener("click", () => location.hash = "#/sns:" + key);
   $("snsList").appendChild(b);
@@ -641,7 +681,7 @@ document.querySelectorAll("[data-go]").forEach(b =>
 /* ════════════ さがす ════════════ */
 const INDEX = [];
 Object.entries(SNS).forEach(([key, s]) => {
-  INDEX.push({ t:s.name, sub:s.one, words:s.name + s.kana + s.one + s.what + s.good.join(""), go:"#/sns:" + key, color:s.color, em:s.em });
+  INDEX.push({ t:s.name, sub:s.one, words:s.name + s.kana + s.one + s.what + s.good.join(""), go:"#/sns:" + key, color:s.color, em:icon(key) });
   s.tasks.forEach(([t]) => INDEX.push({ t, sub:s.name + " の使い方", words:t + s.name + s.kana, go:"#/sns:" + key, color:s.color, em:"👆" }));
   s.tips.forEach(([t]) => INDEX.push({ t, sub:s.name + " の便利ワザ", words:t + s.name + s.kana, go:"#/sns:" + key, color:s.color, em:"💡" }));
   s.care.forEach(([t]) => INDEX.push({ t, sub:s.name + " の注意", words:t + s.name + s.kana, go:"#/sns:" + key, color:s.color, em:"⚠️" }));
