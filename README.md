@@ -1,6 +1,6 @@
 # はじめてのSNS
 
-公開ページ: https://nakanointeria5963-alt.github.io/nobusns/
+公開ページ: https://roguepink.github.io/nobusns/
 
 スマホやパソコンにあまり慣れていない人のための、SNSの手引きです。
 **えらんで押していくだけ**で、始め方と使い方にたどり着けます。文字を打つのは、探したいときだけ。
